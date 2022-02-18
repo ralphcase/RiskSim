@@ -1,25 +1,59 @@
 package RiskSim;
 
-import java.util.Random;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Simulator {
 
 	private static Random generator = new Random();
 
-	private static int[] attackStrengthList = { 3, 4, 5 };
-	private static int[] defenderList = { 2, 1 };
+	private static int[] attackStrengthList = range(11,15);
+	private static int[] defenderList = {3,3};
+
+	private static int battle1att = 3;
+	private static int battle2att = 3;
+	private static int additional = 10;
+
+	private static int[] defender1List = {1,1,2 };
+	private static int[] defender2List = {1,5,1 };
 
 	private static int maxTries = 100000;
 
 	public static void main(String[] args) {
 		for (int attackStrength : attackStrengthList) {
 			successProb(attackStrength, defenderList);
-
 		}
+		System.out.println();
+		System.out.println("optimal: " + optimal());
+	}
+
+	private static int optimal() {
+		double maxprob = 0;
+		int besti = -1;
+		for (int i = 0; i <= additional; i++) {
+			double prob = successProb(battle1att + i, defender1List)
+					* successProb(battle2att + additional - i, defender2List);
+			if (prob > maxprob) {
+				maxprob = prob;
+				besti = i;
+			}
+		}
+		return besti;
+	}
+
+	private static int[] range(int start, int end) {
+		int[] result = new int[end - start];
+		for (int i = start; i < end; i++)
+			result[i - start] = i;
+		return result;
 	}
 
 	private static double successProb(int attackStrength, int[] defenderList) {
+		int sum = 0;
+		for (int v : defenderList)
+			sum += v;
+		System.out.printf("regions: %d armies: %d - ", defenderList.length, sum);
+
 		int i = 0;
 		int wins = 0;
 		int losses = 0;
