@@ -7,15 +7,15 @@ public class Simulator {
 
 	private static Random generator = new Random();
 
-	private static int[] attackStrengthList = range(11,15);
-	private static int[] defenderList = {3,3};
+	private static int[] attackStrengthList = range(28+15+9);
+	private static int[] defenderList = {2,1,1,1,1,1,1,6,1,1,1,1,1,1};
 
-	private static int battle1att = 3;
+	private static int battle1att = 1;
 	private static int battle2att = 3;
-	private static int additional = 10;
+	private static int additional = 22;
 
-	private static int[] defender1List = {1,1,2 };
-	private static int[] defender2List = {1,5,1 };
+	private static int[] defender1List = {3,1,2};
+	private static int[] defender2List = {1,2};
 
 	private static int maxTries = 100000;
 
@@ -25,6 +25,8 @@ public class Simulator {
 		}
 		System.out.println();
 		System.out.println("optimal: " + optimal());
+//		System.out.println(fullBattle(4,3));
+		System.out.println(randsong(36, 38));
 	}
 
 	private static int optimal() {
@@ -33,6 +35,7 @@ public class Simulator {
 		for (int i = 0; i <= additional; i++) {
 			double prob = successProb(battle1att + i, defender1List)
 					* successProb(battle2att + additional - i, defender2List);
+			System.out.printf("%3.1f%%\n", 100*prob);
 			if (prob > maxprob) {
 				maxprob = prob;
 				besti = i;
@@ -40,7 +43,11 @@ public class Simulator {
 		}
 		return besti;
 	}
-
+	
+	private static int[] range(int single) {
+		return range(single, single+1);
+	}
+	
 	private static int[] range(int start, int end) {
 		int[] result = new int[end - start];
 		for (int i = start; i < end; i++)
@@ -162,4 +169,7 @@ public class Simulator {
 		return 1 + generator.nextInt(sides);
 	}
 
+	private static int randsong(int curr, int max) {
+		return curr + generator.nextInt(max-curr);
+	}
 }
