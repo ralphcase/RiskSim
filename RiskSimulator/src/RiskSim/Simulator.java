@@ -7,15 +7,15 @@ public class Simulator {
 
 	private static Random generator = new Random();
 
-	private static int[] attackStrengthList = range(28+15+9);
-	private static int[] defenderList = {2,1,1,1,1,1,1,6,1,1,1,1,1,1};
+	private static int[] attackStrengthList = range(56+18);
+	private static int[] defenderList = {1,1,49,1,1,1,1,1,1,1};
 
 	private static int battle1att = 1;
-	private static int battle2att = 3;
-	private static int additional = 22;
+	private static int battle2att = 1;
+	private static int additional = 37;
 
-	private static int[] defender1List = {3,1,2};
-	private static int[] defender2List = {1,2};
+	private static int[] defender1List = {1,1,1,1,1,1,1};
+	private static int[] defender2List = {1,1,1,1,1,1,1,1};
 
 	private static int maxTries = 100000;
 
@@ -26,9 +26,13 @@ public class Simulator {
 		System.out.println();
 		System.out.println("optimal: " + optimal());
 //		System.out.println(fullBattle(4,3));
-		System.out.println(randsong(36, 38));
+//		System.out.println(randsong(36, 38));
 	}
 
+	/*
+	 * Find the optimal split of the additional armies to maximize the 
+	 * probability of winning against both defender lists.
+	 */
 	private static int optimal() {
 		double maxprob = 0;
 		int besti = -1;
@@ -44,10 +48,16 @@ public class Simulator {
 		return besti;
 	}
 	
+	/*
+	 * return a range of length 1 for a single value.
+	 */
 	private static int[] range(int single) {
 		return range(single, single+1);
 	}
 	
+	/* 
+	 * return an array that is the range of ints from start to end.
+	 */
 	private static int[] range(int start, int end) {
 		int[] result = new int[end - start];
 		for (int i = start; i < end; i++)
@@ -55,6 +65,10 @@ public class Simulator {
 		return result;
 	}
 
+	/* 
+	 * return the probability that an attacking army of size attackStrength
+	 * can defeat a list of armies in order.
+	 */
 	private static double successProb(int attackStrength, int[] defenderList) {
 		int sum = 0;
 		for (int v : defenderList)
@@ -80,6 +94,10 @@ public class Simulator {
 		return result;
 	}
 
+	/*
+	 * Return true if the battle has been tried enough times that the probability 
+	 * has converged to a specific value.
+	 */
 	private static boolean converged() {
 		return false;
 	}
@@ -150,6 +168,9 @@ public class Simulator {
 		return result;
 	}
 
+	/*
+	 * Reverse the values in the input array.
+	 */
 	private static void reverse(int[] input) {
 		int i, temp;
 		int size = input.length;
