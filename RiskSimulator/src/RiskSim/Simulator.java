@@ -7,19 +7,22 @@ public class Simulator {
 
 	private static Random generator = new Random();
 
-	private static int[] attackStrengthList = range(56+18);
-	private static int[] defenderList = {1,1,49,1,1,1,1,1,1,1};
 
-	private static int battle1att = 1;
-	private static int battle2att = 1;
-	private static int additional = 37;
+	private static int[] attackStrengthList = range(2);
+	private static int[] defenderList = {1};
 
-	private static int[] defender1List = {1,1,1,1,1,1,1};
-	private static int[] defender2List = {1,1,1,1,1,1,1,1};
+	private static int battle1att = 5;
+	private static int battle2att = 5;
+	private static int additional = 50;
 
-	private static int maxTries = 100000;
+	private static int[] defender1List = {1,1,1,1,1};
+	private static int[] defender2List = {1,1,1,1,1};
+
+	private static int maxTries = 1000000;
 
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
+
 		for (int attackStrength : attackStrengthList) {
 			successProb(attackStrength, defenderList);
 		}
@@ -27,6 +30,9 @@ public class Simulator {
 		System.out.println("optimal: " + optimal());
 //		System.out.println(fullBattle(4,3));
 //		System.out.println(randsong(36, 38));
+		
+		long endTime = System.currentTimeMillis();
+		System.out.println("It took " + (endTime - startTime) / 1000.0 + " seconds.");
 	}
 
 	/*
@@ -73,13 +79,16 @@ public class Simulator {
 		int sum = 0;
 		for (int v : defenderList)
 			sum += v;
-		System.out.printf("regions: %d armies: %d - ", defenderList.length, sum);
+		System.out.printf("regions: %d armies: %d - ", 
+				defenderList.length, 
+				sum);
 
 		int i = 0;
 		int wins = 0;
 		int losses = 0;
 		int remain = 0;
-		while (i < maxTries && !converged()) {
+		double result = 0;
+		while (i < maxTries && !converged(result)) {
 			i++;
 			int single = campaign(attackStrength, defenderList);
 			if (single > 0) {
@@ -87,10 +96,13 @@ public class Simulator {
 				remain += single;
 			} else
 				losses++;
+			result = wins / (double) (wins + losses);
 		}
-		double result = wins / (double) (wins + losses);
-		System.out.printf("attackers: %d, win: %3.1f%%, remaining: %.2f%n", attackStrength, 100 * result,
-				remain / (double) wins);
+		System.out.printf("attackers: %d, win: %3.1f%%, remaining: %.2f - %d tries%n", 
+				attackStrength, 
+				100 * result,
+				remain / (double) wins,
+				i);
 		return result;
 	}
 
@@ -98,7 +110,13 @@ public class Simulator {
 	 * Return true if the battle has been tried enough times that the probability 
 	 * has converged to a specific value.
 	 */
-	private static boolean converged() {
+	static final double range = 100;
+	static final double threshold = .000000001;
+	static double history = -1; 
+	private static boolean converged(double result) {
+		if (Math.abs(result - history) < threshold)
+			return true;
+		history = (range-1)*history/range + result/range;
 		return false;
 	}
 
