@@ -8,15 +8,15 @@ public class Simulator {
 	private static Random generator = new Random();
 
 
-	private static int[] attackStrengthList = range(2);
-	private static int[] defenderList = {1};
+	private static int[] attackStrengthList = range(69);
+	private static int[] defenderList = {1,1,1,1,1,1};
 
-	private static int battle1att = 5;
-	private static int battle2att = 5;
-	private static int additional = 50;
+	private static int battle1att = 1;
+	private static int battle2att = 1;
+	private static int additional = 68;
 
-	private static int[] defender1List = {1,1,1,1,1};
-	private static int[] defender2List = {1,1,1,1,1};
+	private static int[] defender1List = {1,20};
+	private static int[] defender2List = {1,1,1,1,1,1,1,1,1,1,20};
 
 	private static int maxTries = 1000000;
 
@@ -88,6 +88,7 @@ public class Simulator {
 		int losses = 0;
 		int remain = 0;
 		double result = 0;
+		history = -1;
 		while (i < maxTries && !converged(result)) {
 			i++;
 			int single = campaign(attackStrength, defenderList);
