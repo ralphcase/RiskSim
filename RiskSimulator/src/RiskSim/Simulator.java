@@ -7,21 +7,29 @@ public class Simulator {
 
 	private static Random generator = new Random();
 
-
-	private static int[] attackStrengthList = range(27);
-	private static int[] defenderList = {2,3,4,4};
-
-	private static int battle1att = 12+6;
-	private static int battle2att = 1+9;
+	private static int[] attackStrengthList = range(5+8+114);
+	private static int[] defenderList = {1,20,1,3,1,1,3,6,101};
+	
+	private static int battle1att = 0;
+	private static int battle2att = 0;
 	private static int additional = 0;
-
-	private static int[] defender1List = {22,1,1,1,1};
-	private static int[] defender2List = {22,1,1,1,1};
+	
+	private static int[] defender1List = {1,1,46,1,1,1,123};
+	private static int[] defender2List = {2,1,4};
+	
 
 	private static int maxTries = 1000000;
 
 	public static void main(String[] args) {
-		long startTime = System.currentTimeMillis();
+//		System.out.println(defenderList.length);
+//		int sum = 0; 
+//		for (int n : defenderList) {
+//			sum += n;
+//		}
+//		System.out.println(defenderList.length+sum);
+		
+			long startTime = System.currentTimeMillis();
+		System.out.println(-1 % 2);
 
 		for (int attackStrength : attackStrengthList) {
 			successProb(attackStrength, defenderList);
